@@ -1,0 +1,42 @@
+name: Android only (dogfood)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.1
+
+      - name: Read Flutter version
+        id: versions
+        run: echo "flutter_version=$(jq -r '.flutter' .fvmrc)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+          cache: "gradle"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2.19.0
+        with:
+          channel: "stable"
+          flutter-version: ${{ steps.versions.outputs.flutter_version }}
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Android APK (debug)
+        run: flutter build apk --debug --split-per-abi --build-number=${{ github.run_number }} --flavor production
+
+      - name: Archive Android APKs
+        uses: actions/upload-artifact@v4.0.0
+        with:
+          name: fladder-android-debug
+          path: build/app/outputs/flutter-apk/
