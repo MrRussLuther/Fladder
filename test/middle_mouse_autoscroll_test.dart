@@ -107,6 +107,21 @@ void main() {
     await release(tester, far);
   });
 
+  testWidgets('the speed keeps ramping up far from the origin', (tester) async {
+    await tester.pumpWidget(buildApp());
+    const shortHold = Duration(milliseconds: 100);
+
+    final near = await hold(tester, const Offset(20, 250), const Offset(500, 0), hold: shortHold);
+    final nearOffset = horizontal.offset;
+    await release(tester, near);
+    horizontal.jumpTo(0);
+    await tester.pump();
+
+    final far = await hold(tester, const Offset(20, 250), const Offset(780, 0), hold: shortHold);
+    expect(horizontal.offset, greaterThan(nearOffset * 2));
+    await release(tester, far);
+  });
+
   testWidgets('small movements inside the dead zone do not scroll', (tester) async {
     await tester.pumpWidget(buildApp());
 
