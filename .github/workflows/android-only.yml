@@ -2,6 +2,11 @@ name: Android only (dogfood)
 
 on:
   workflow_dispatch:
+    inputs:
+      sideload:
+        description: "Profile build of the development flavor (installs next to the store app)"
+        type: boolean
+        default: false
 
 jobs:
   build-android:
@@ -33,7 +38,12 @@ jobs:
         run: flutter pub get
 
       - name: Build Android APK (debug)
+        if: ${{ !inputs.sideload }}
         run: flutter build apk --debug --split-per-abi --build-number=${{ github.run_number }} --flavor production
+
+      - name: Build Android APK (sideload)
+        if: ${{ inputs.sideload }}
+        run: flutter build apk --profile --split-per-abi --build-number=${{ github.run_number }} --flavor development
 
       - name: Archive Android APKs
         uses: actions/upload-artifact@v4.0.0
