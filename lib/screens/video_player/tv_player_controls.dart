@@ -27,6 +27,7 @@ import 'package:fladder/screens/video_player/components/video_player_options_she
 import 'package:fladder/screens/video_player/components/video_player_quality_controls.dart';
 import 'package:fladder/screens/video_player/components/video_player_screenshot_indicator.dart';
 import 'package:fladder/screens/video_player/components/video_player_seek_indicator.dart';
+import 'package:fladder/screens/video_player/components/video_player_speed_indicator.dart';
 import 'package:fladder/screens/video_player/components/video_player_volume_indicator.dart';
 import 'package:fladder/screens/video_player/components/video_progress_bar.dart';
 import 'package:fladder/screens/video_player/components/video_volume_slider.dart';
@@ -304,6 +305,15 @@ class _TvPlayerControlsState extends ConsumerState<TvPlayerControls> {
                         const Spacer(),
                         if (AdaptiveLayout.viewSizeOf(context) >= ViewSize.tablet &&
                             ref.read(videoPlayerProvider).hasPlayer) ...{
+                          if (ref.watch(videoPlayerSettingsProvider.select((value) => value.showPlaybackRateButton)))
+                            Tooltip(
+                              message: context.localized.playbackRate,
+                              child: TextButton.icon(
+                                onPressed: () => showPlaybackSpeed(context),
+                                icon: Icon(speedIcon(ref.watch(playbackRateProvider))),
+                                label: Text("x${ref.watch(playbackRateProvider)}"),
+                              ),
+                            ),
                           if (bitRateOptions?.isNotEmpty == true)
                             Tooltip(
                               message: context.localized.qualityOptionsTitle,

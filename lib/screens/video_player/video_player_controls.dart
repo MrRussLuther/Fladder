@@ -516,6 +516,15 @@ class _DesktopControlsState extends ConsumerState<DesktopControls> {
                         const Spacer(),
                         if (AdaptiveLayout.viewSizeOf(context) >= ViewSize.tablet &&
                             ref.read(videoPlayerProvider).hasPlayer) ...{
+                          if (ref.watch(videoPlayerSettingsProvider.select((value) => value.showPlaybackRateButton)))
+                            Tooltip(
+                              message: context.localized.playbackRate,
+                              child: TextButton.icon(
+                                onPressed: () => showPlaybackSpeed(context),
+                                icon: Icon(speedIcon(ref.watch(playbackRateProvider))),
+                                label: Text("x${ref.watch(playbackRateProvider)}"),
+                              ),
+                            ),
                           if (bitRateOptions?.isNotEmpty == true)
                             Tooltip(
                               message: context.localized.qualityOptionsTitle,
