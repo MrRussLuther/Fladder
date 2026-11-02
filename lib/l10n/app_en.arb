@@ -2908,5 +2908,6 @@
   "showPlaybackRateButtonTitle": "Playback rate button",
   "@showPlaybackRateButtonTitle": {},
   "showPlaybackRateButtonDesc": "Show the current playback rate in the player controls, tap it to change the rate",
-  "@showPlaybackRateButtonDesc": {}
+  "@showPlaybackRateButtonDesc": {},
+  "row": "Row"
 }

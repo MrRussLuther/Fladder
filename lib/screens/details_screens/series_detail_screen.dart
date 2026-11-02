@@ -6,7 +6,9 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'package:fladder/models/item_base_model.dart';
 import 'package:fladder/models/items/series_model.dart';
+import 'package:fladder/models/settings/client_settings_model.dart';
 import 'package:fladder/providers/items/series_details_provider.dart';
+import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/routes/auto_router.gr.dart';
 import 'package:fladder/screens/details_screens/components/media_stream_information.dart';
@@ -14,6 +16,7 @@ import 'package:fladder/screens/details_screens/components/overview_header.dart'
 import 'package:fladder/screens/seerr/widgets/seerr_poster_row.dart';
 import 'package:fladder/screens/shared/detail_scaffold.dart';
 import 'package:fladder/screens/shared/media/components/media_play_button.dart';
+import 'package:fladder/screens/shared/media/episode_details_list.dart';
 import 'package:fladder/screens/shared/media/episode_posters.dart';
 import 'package:fladder/screens/shared/media/expanding_text.dart';
 import 'package:fladder/screens/shared/media/external_urls.dart';
@@ -47,10 +50,12 @@ class _SeriesDetailScreenState extends ConsumerState<SeriesDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final details = ref.watch(providerId);
-    final wrapAlignment =
-        AdaptiveLayout.viewSizeOf(context) != ViewSize.phone ? WrapAlignment.start : WrapAlignment.center;
+    final wrapAlignment = AdaptiveLayout.viewSizeOf(context) != ViewSize.phone
+        ? WrapAlignment.start
+        : WrapAlignment.center;
 
     final currentEpisode = details?.nextUp;
+    final episodeViewType = ref.watch(clientSettingsProvider.select((value) => value.episodeViewType));
 
     return DetailScaffold(
       label: details?.name ?? "",
@@ -58,11 +63,7 @@ class _SeriesDetailScreenState extends ConsumerState<SeriesDetailScreen> {
       actions: (context) => details?.generateActions(
         context,
         ref,
-        exclude: {
-          ItemActions.play,
-          ItemActions.playFromStart,
-          ItemActions.details,
-        },
+        exclude: {ItemActions.play, ItemActions.playFromStart, ItemActions.details},
         onDeleteSuccesFully: (item) {
           if (context.mounted) {
             context.router.popBack();
@@ -80,11 +81,7 @@ class _SeriesDetailScreenState extends ConsumerState<SeriesDetailScreen> {
                     ? MediaPlayButton(
                         item: currentEpisode,
                         onPressed: (restart) async {
-                          await currentEpisode.play(
-                            detailsContext,
-                            ref,
-                            startPosition: restart ? Duration.zero : null,
-                          );
+                          await currentEpisode.play(detailsContext, ref, startPosition: restart ? Duration.zero : null);
                           ref.read(providerId.notifier).fetchDetails(widget.item);
                         },
                         onLongPressed: (restart) async {
@@ -128,10 +125,13 @@ class _SeriesDetailScreenState extends ConsumerState<SeriesDetailScreen> {
                           content: (context, scrollController) => ListView(
                             controller: scrollController,
                             shrinkWrap: true,
-                            children: details.generateActions(detailsContext, ref, exclude: {
-                              ItemActions.openParent,
-                              ItemActions.details
-                            }).listTileItems(context, useIcons: true),
+                            children: details
+                                .generateActions(
+                                  detailsContext,
+                                  ref,
+                                  exclude: {ItemActions.openParent, ItemActions.details},
+                                )
+                                .listTileItems(context, useIcons: true),
                           ),
                         );
                       },
@@ -139,6 +139,14 @@ class _SeriesDetailScreenState extends ConsumerState<SeriesDetailScreen> {
                       refreshOnEnd: false,
                       icon: IconsaxPlusLinear.more,
                     ),
+                    if ((details.availableEpisodes?.isNotEmpty ?? false) &&
+                        AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad)
+                      EpisodeViewTypeSelector(
+                        options: const [null, ...EpisodeDetailsViewType.values],
+                        selected: episodeViewType,
+                        onChanged: (value) => ref.read(clientSettingsProvider.notifier).setEpisodeViewType(value),
+                        showLabels: false,
+                      ),
                   ],
                 ),
                 padding: padding,
@@ -150,18 +158,13 @@ class _SeriesDetailScreenState extends ConsumerState<SeriesDetailScreen> {
                 genres: details.overview.genreItems,
                 onGenreClicked: (genre) {
                   final itemViewId = details.parentId ?? "";
-                  LibrarySearchRoute(
-                    parentId: [itemViewId],
-                    genres: {genre.name: true},
-                  ).push(context);
+                  LibrarySearchRoute(parentId: [itemViewId], genres: {genre.name: true}).push(context);
                 },
                 mediaStreamHelper: currentEpisode?.mediaStreams != null
                     ? MediaStreamHelper(
                         mediaStream: currentEpisode!.mediaStreams,
                         onItemChanged: (changed) {
-                          final updateEpisode = currentEpisode.copyWith(
-                            mediaStreams: changed,
-                          );
+                          final updateEpisode = currentEpisode.copyWith(mediaStreams: changed);
                           ref.read(providerId.notifier).updateEpisodeInfo(updateEpisode);
                         },
                       )
@@ -171,61 +174,54 @@ class _SeriesDetailScreenState extends ConsumerState<SeriesDetailScreen> {
               if (details.overview.summary.isNotEmpty)
                 Padding(
                   padding: padding,
-                  child: Builder(builder: (context) {
-                    return ExpandingText(
-                      text: details.overview.summary,
-                      onFocusChange: (onFocus) {
-                        if (onFocus) {
-                          context.ensureVisible(alignment: 1);
-                        }
-                      },
-                    );
-                  }),
+                  child: Builder(
+                    builder: (context) {
+                      return ExpandingText(
+                        text: details.overview.summary,
+                        onFocusChange: (onFocus) {
+                          if (onFocus) {
+                            context.ensureVisible(alignment: 1);
+                          }
+                        },
+                      );
+                    },
+                  ),
                 ),
               if (details.availableEpisodes?.isNotEmpty ?? false)
-                Builder(builder: (context) {
-                  return EpisodePosters(
-                    contentPadding: padding,
-                    selectedEpisode: currentEpisode,
-                    seasons: details.seasons ?? [],
-                    titleActionsPosition:
-                        AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? null : VerticalDirection.down,
-                    label: context.localized.episode(details.availableEpisodes?.length ?? 2),
-                    revealAlignment: 0.8,
-                    onEpisodeTap: (action, episode) async {
-                      action();
-                    },
-                    playEpisode: (episode) async {
-                      await episode.play(
-                        context,
-                        ref,
-                      );
-                      ref.read(providerId.notifier).fetchDetails(widget.item);
-                    },
-                    episodes: details.availableEpisodes ?? [],
-                  );
-                }),
-              if (details.seasons?.isNotEmpty ?? false)
-                SeasonsRow(
-                  contentPadding: padding,
-                  seasons: details.seasons,
+                Builder(
+                  builder: (context) {
+                    return EpisodePosters(
+                      contentPadding: padding,
+                      selectedEpisode: currentEpisode,
+                      seasons: details.seasons ?? [],
+                      titleActionsPosition: AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad
+                          ? null
+                          : VerticalDirection.down,
+                      label: context.localized.episode(details.availableEpisodes?.length ?? 2),
+                      revealAlignment: 0.8,
+                      onEpisodeTap: (action, episode) async {
+                        action();
+                      },
+                      playEpisode: (episode) async {
+                        await episode.play(context, ref);
+                        ref.read(providerId.notifier).fetchDetails(widget.item);
+                      },
+                      episodes: details.availableEpisodes ?? [],
+                      viewType: episodeViewType,
+                    );
+                  },
                 ),
+              if (details.seasons?.isNotEmpty ?? false) SeasonsRow(contentPadding: padding, seasons: details.seasons),
               if (details.overview.people.isNotEmpty)
-                PeopleRow(
-                  people: details.overview.people,
-                  contentPadding: padding,
-                ),
+                PeopleRow(people: details.overview.people, contentPadding: padding),
               if (details.specialFeatures?.isNotEmpty ?? false)
                 SpecialFeaturesRow(
-                    contentPadding: padding,
-                    label: detailsContext.localized.specialFeature(details.specialFeatures?.length ?? 2),
-                    specialFeatures: details.specialFeatures ?? []),
-              if (details.related.isNotEmpty)
-                PosterRow(
-                  posters: details.related,
                   contentPadding: padding,
-                  label: detailsContext.localized.related,
+                  label: detailsContext.localized.specialFeature(details.specialFeatures?.length ?? 2),
+                  specialFeatures: details.specialFeatures ?? [],
                 ),
+              if (details.related.isNotEmpty)
+                PosterRow(posters: details.related, contentPadding: padding, label: detailsContext.localized.related),
               if (details.seerrRecommended.isNotEmpty)
                 SeerrPosterRow(
                   posters: details.seerrRecommended,
@@ -241,10 +237,8 @@ class _SeriesDetailScreenState extends ConsumerState<SeriesDetailScreen> {
               if (details.overview.externalUrls?.isNotEmpty == true)
                 Padding(
                   padding: padding,
-                  child: ExternalUrlsRow(
-                    urls: details.overview.externalUrls,
-                  ),
-                )
+                  child: ExternalUrlsRow(urls: details.overview.externalUrls),
+                ),
             ].addPadding(const EdgeInsets.symmetric(vertical: 16))
           : [],
     );

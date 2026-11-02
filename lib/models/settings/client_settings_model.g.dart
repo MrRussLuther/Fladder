@@ -50,6 +50,7 @@ _ClientSettingsModel _$ClientSettingsModelFromJson(Map<String, dynamic> json) =>
       lowResourceMode: $enumDecodeNullable(_$LowResourceModeEnumMap, json['lowResourceMode']) ?? LowResourceMode.auto,
       lastViewedUpdate: json['lastViewedUpdate'] as String?,
       libraryPageSize: (json['libraryPageSize'] as num?)?.toInt(),
+      episodeViewType: $enumDecodeNullable(_$EpisodeDetailsViewTypeEnumMap, json['episodeViewType']),
       shortcuts: (json['shortcuts'] as Map<String, dynamic>?)?.map(
             (k, e) =>
                 MapEntry($enumDecode(_$GlobalHotKeysEnumMap, k), KeyCombination.fromJson(e as Map<String, dynamic>)),
@@ -93,6 +94,7 @@ Map<String, dynamic> _$ClientSettingsModelToJson(_ClientSettingsModel instance) 
       'lowResourceMode': _$LowResourceModeEnumMap[instance.lowResourceMode]!,
       'lastViewedUpdate': instance.lastViewedUpdate,
       'libraryPageSize': instance.libraryPageSize,
+      'episodeViewType': _$EpisodeDetailsViewTypeEnumMap[instance.episodeViewType],
       'shortcuts': instance.shortcuts.map((k, e) => MapEntry(_$GlobalHotKeysEnumMap[k]!, e)),
     };
 
@@ -142,6 +144,11 @@ const _$LowResourceModeEnumMap = {
   LowResourceMode.auto: 'auto',
   LowResourceMode.on: 'on',
   LowResourceMode.off: 'off',
+};
+
+const _$EpisodeDetailsViewTypeEnumMap = {
+  EpisodeDetailsViewType.list: 'list',
+  EpisodeDetailsViewType.grid: 'grid',
 };
 
 const _$GlobalHotKeysEnumMap = {

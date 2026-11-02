@@ -50,6 +50,7 @@ mixin _$ClientSettingsModel implements DiagnosticableTreeMixin {
   LowResourceMode get lowResourceMode;
   String? get lastViewedUpdate;
   int? get libraryPageSize;
+  EpisodeDetailsViewType? get episodeViewType;
   Map<GlobalHotKeys, KeyCombination> get shortcuts;
 
   /// Create a copy of ClientSettingsModel
@@ -101,12 +102,13 @@ mixin _$ClientSettingsModel implements DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('lowResourceMode', lowResourceMode))
       ..add(DiagnosticsProperty('lastViewedUpdate', lastViewedUpdate))
       ..add(DiagnosticsProperty('libraryPageSize', libraryPageSize))
+      ..add(DiagnosticsProperty('episodeViewType', episodeViewType))
       ..add(DiagnosticsProperty('shortcuts', shortcuts));
   }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ClientSettingsModel(syncPath: $syncPath, transcodeDownloadModel: $transcodeDownloadModel, transcodeMusicDownloadModel: $transcodeMusicDownloadModel, position: $position, size: $size, timeOut: $timeOut, nextUpDateCutoff: $nextUpDateCutoff, updateNotificationsInterval: $updateNotificationsInterval, themeMode: $themeMode, themeColor: $themeColor, deriveColorsFromItem: $deriveColorsFromItem, dynamicPosterColors: $dynamicPosterColors, amoledBlack: $amoledBlack, blurPlaceHolders: $blurPlaceHolders, blurUpcomingEpisodes: $blurUpcomingEpisodes, selectedLocale: $selectedLocale, enableMediaKeys: $enableMediaKeys, posterSize: $posterSize, pinchPosterZoom: $pinchPosterZoom, mouseDragSupport: $mouseDragSupport, requireWifi: $requireWifi, expandSideBar: $expandSideBar, showAllCollectionTypes: $showAllCollectionTypes, maxConcurrentDownloads: $maxConcurrentDownloads, schemeVariant: $schemeVariant, backgroundImage: $backgroundImage, enableBlurEffects: $enableBlurEffects, checkForUpdates: $checkForUpdates, usePosterForLibrary: $usePosterForLibrary, useSystemIME: $useSystemIME, useTVExpandedLayout: $useTVExpandedLayout, forceLeanBackMode: $forceLeanBackMode, lowResourceMode: $lowResourceMode, lastViewedUpdate: $lastViewedUpdate, libraryPageSize: $libraryPageSize, shortcuts: $shortcuts)';
+    return 'ClientSettingsModel(syncPath: $syncPath, transcodeDownloadModel: $transcodeDownloadModel, transcodeMusicDownloadModel: $transcodeMusicDownloadModel, position: $position, size: $size, timeOut: $timeOut, nextUpDateCutoff: $nextUpDateCutoff, updateNotificationsInterval: $updateNotificationsInterval, themeMode: $themeMode, themeColor: $themeColor, deriveColorsFromItem: $deriveColorsFromItem, dynamicPosterColors: $dynamicPosterColors, amoledBlack: $amoledBlack, blurPlaceHolders: $blurPlaceHolders, blurUpcomingEpisodes: $blurUpcomingEpisodes, selectedLocale: $selectedLocale, enableMediaKeys: $enableMediaKeys, posterSize: $posterSize, pinchPosterZoom: $pinchPosterZoom, mouseDragSupport: $mouseDragSupport, requireWifi: $requireWifi, expandSideBar: $expandSideBar, showAllCollectionTypes: $showAllCollectionTypes, maxConcurrentDownloads: $maxConcurrentDownloads, schemeVariant: $schemeVariant, backgroundImage: $backgroundImage, enableBlurEffects: $enableBlurEffects, checkForUpdates: $checkForUpdates, usePosterForLibrary: $usePosterForLibrary, useSystemIME: $useSystemIME, useTVExpandedLayout: $useTVExpandedLayout, forceLeanBackMode: $forceLeanBackMode, lowResourceMode: $lowResourceMode, lastViewedUpdate: $lastViewedUpdate, libraryPageSize: $libraryPageSize, episodeViewType: $episodeViewType, shortcuts: $shortcuts)';
   }
 }
 
@@ -151,6 +153,7 @@ abstract mixin class $ClientSettingsModelCopyWith<$Res> {
       LowResourceMode lowResourceMode,
       String? lastViewedUpdate,
       int? libraryPageSize,
+      EpisodeDetailsViewType? episodeViewType,
       Map<GlobalHotKeys, KeyCombination> shortcuts});
 
   $TranscodeDownloadModelCopyWith<$Res> get transcodeDownloadModel;
@@ -203,6 +206,7 @@ class _$ClientSettingsModelCopyWithImpl<$Res> implements $ClientSettingsModelCop
     Object? lowResourceMode = null,
     Object? lastViewedUpdate = freezed,
     Object? libraryPageSize = freezed,
+    Object? episodeViewType = freezed,
     Object? shortcuts = null,
   }) {
     return _then(_self.copyWith(
@@ -346,6 +350,10 @@ class _$ClientSettingsModelCopyWithImpl<$Res> implements $ClientSettingsModelCop
           ? _self.libraryPageSize
           : libraryPageSize // ignore: cast_nullable_to_non_nullable
               as int?,
+      episodeViewType: freezed == episodeViewType
+          ? _self.episodeViewType
+          : episodeViewType // ignore: cast_nullable_to_non_nullable
+              as EpisodeDetailsViewType?,
       shortcuts: null == shortcuts
           ? _self.shortcuts
           : shortcuts // ignore: cast_nullable_to_non_nullable
@@ -493,6 +501,7 @@ extension ClientSettingsModelPatterns on ClientSettingsModel {
             LowResourceMode lowResourceMode,
             String? lastViewedUpdate,
             int? libraryPageSize,
+            EpisodeDetailsViewType? episodeViewType,
             Map<GlobalHotKeys, KeyCombination> shortcuts)?
         internal,
     required TResult orElse(),
@@ -536,6 +545,7 @@ extension ClientSettingsModelPatterns on ClientSettingsModel {
             _that.lowResourceMode,
             _that.lastViewedUpdate,
             _that.libraryPageSize,
+            _that.episodeViewType,
             _that.shortcuts);
       case _:
         return orElse();
@@ -593,6 +603,7 @@ extension ClientSettingsModelPatterns on ClientSettingsModel {
             LowResourceMode lowResourceMode,
             String? lastViewedUpdate,
             int? libraryPageSize,
+            EpisodeDetailsViewType? episodeViewType,
             Map<GlobalHotKeys, KeyCombination> shortcuts)
         internal,
   }) {
@@ -635,6 +646,7 @@ extension ClientSettingsModelPatterns on ClientSettingsModel {
             _that.lowResourceMode,
             _that.lastViewedUpdate,
             _that.libraryPageSize,
+            _that.episodeViewType,
             _that.shortcuts);
       case _:
         throw StateError('Unexpected subclass');
@@ -691,6 +703,7 @@ extension ClientSettingsModelPatterns on ClientSettingsModel {
             LowResourceMode lowResourceMode,
             String? lastViewedUpdate,
             int? libraryPageSize,
+            EpisodeDetailsViewType? episodeViewType,
             Map<GlobalHotKeys, KeyCombination> shortcuts)?
         internal,
   }) {
@@ -733,6 +746,7 @@ extension ClientSettingsModelPatterns on ClientSettingsModel {
             _that.lowResourceMode,
             _that.lastViewedUpdate,
             _that.libraryPageSize,
+            _that.episodeViewType,
             _that.shortcuts);
       case _:
         return null;
@@ -779,6 +793,7 @@ class _ClientSettingsModel extends ClientSettingsModel with DiagnosticableTreeMi
       this.lowResourceMode = LowResourceMode.auto,
       this.lastViewedUpdate,
       this.libraryPageSize,
+      this.episodeViewType,
       final Map<GlobalHotKeys, KeyCombination> shortcuts = const {}})
       : _shortcuts = shortcuts,
         super._();
@@ -883,6 +898,8 @@ class _ClientSettingsModel extends ClientSettingsModel with DiagnosticableTreeMi
   final String? lastViewedUpdate;
   @override
   final int? libraryPageSize;
+  @override
+  final EpisodeDetailsViewType? episodeViewType;
   final Map<GlobalHotKeys, KeyCombination> _shortcuts;
   @override
   @JsonKey()
@@ -946,12 +963,13 @@ class _ClientSettingsModel extends ClientSettingsModel with DiagnosticableTreeMi
       ..add(DiagnosticsProperty('lowResourceMode', lowResourceMode))
       ..add(DiagnosticsProperty('lastViewedUpdate', lastViewedUpdate))
       ..add(DiagnosticsProperty('libraryPageSize', libraryPageSize))
+      ..add(DiagnosticsProperty('episodeViewType', episodeViewType))
       ..add(DiagnosticsProperty('shortcuts', shortcuts));
   }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ClientSettingsModel.internal(syncPath: $syncPath, transcodeDownloadModel: $transcodeDownloadModel, transcodeMusicDownloadModel: $transcodeMusicDownloadModel, position: $position, size: $size, timeOut: $timeOut, nextUpDateCutoff: $nextUpDateCutoff, updateNotificationsInterval: $updateNotificationsInterval, themeMode: $themeMode, themeColor: $themeColor, deriveColorsFromItem: $deriveColorsFromItem, dynamicPosterColors: $dynamicPosterColors, amoledBlack: $amoledBlack, blurPlaceHolders: $blurPlaceHolders, blurUpcomingEpisodes: $blurUpcomingEpisodes, selectedLocale: $selectedLocale, enableMediaKeys: $enableMediaKeys, posterSize: $posterSize, pinchPosterZoom: $pinchPosterZoom, mouseDragSupport: $mouseDragSupport, requireWifi: $requireWifi, expandSideBar: $expandSideBar, showAllCollectionTypes: $showAllCollectionTypes, maxConcurrentDownloads: $maxConcurrentDownloads, schemeVariant: $schemeVariant, backgroundImage: $backgroundImage, enableBlurEffects: $enableBlurEffects, checkForUpdates: $checkForUpdates, usePosterForLibrary: $usePosterForLibrary, useSystemIME: $useSystemIME, useTVExpandedLayout: $useTVExpandedLayout, forceLeanBackMode: $forceLeanBackMode, lowResourceMode: $lowResourceMode, lastViewedUpdate: $lastViewedUpdate, libraryPageSize: $libraryPageSize, shortcuts: $shortcuts)';
+    return 'ClientSettingsModel.internal(syncPath: $syncPath, transcodeDownloadModel: $transcodeDownloadModel, transcodeMusicDownloadModel: $transcodeMusicDownloadModel, position: $position, size: $size, timeOut: $timeOut, nextUpDateCutoff: $nextUpDateCutoff, updateNotificationsInterval: $updateNotificationsInterval, themeMode: $themeMode, themeColor: $themeColor, deriveColorsFromItem: $deriveColorsFromItem, dynamicPosterColors: $dynamicPosterColors, amoledBlack: $amoledBlack, blurPlaceHolders: $blurPlaceHolders, blurUpcomingEpisodes: $blurUpcomingEpisodes, selectedLocale: $selectedLocale, enableMediaKeys: $enableMediaKeys, posterSize: $posterSize, pinchPosterZoom: $pinchPosterZoom, mouseDragSupport: $mouseDragSupport, requireWifi: $requireWifi, expandSideBar: $expandSideBar, showAllCollectionTypes: $showAllCollectionTypes, maxConcurrentDownloads: $maxConcurrentDownloads, schemeVariant: $schemeVariant, backgroundImage: $backgroundImage, enableBlurEffects: $enableBlurEffects, checkForUpdates: $checkForUpdates, usePosterForLibrary: $usePosterForLibrary, useSystemIME: $useSystemIME, useTVExpandedLayout: $useTVExpandedLayout, forceLeanBackMode: $forceLeanBackMode, lowResourceMode: $lowResourceMode, lastViewedUpdate: $lastViewedUpdate, libraryPageSize: $libraryPageSize, episodeViewType: $episodeViewType, shortcuts: $shortcuts)';
   }
 }
 
@@ -997,6 +1015,7 @@ abstract mixin class _$ClientSettingsModelCopyWith<$Res> implements $ClientSetti
       LowResourceMode lowResourceMode,
       String? lastViewedUpdate,
       int? libraryPageSize,
+      EpisodeDetailsViewType? episodeViewType,
       Map<GlobalHotKeys, KeyCombination> shortcuts});
 
   @override
@@ -1050,6 +1069,7 @@ class __$ClientSettingsModelCopyWithImpl<$Res> implements _$ClientSettingsModelC
     Object? lowResourceMode = null,
     Object? lastViewedUpdate = freezed,
     Object? libraryPageSize = freezed,
+    Object? episodeViewType = freezed,
     Object? shortcuts = null,
   }) {
     return _then(_ClientSettingsModel(
@@ -1193,6 +1213,10 @@ class __$ClientSettingsModelCopyWithImpl<$Res> implements _$ClientSettingsModelC
           ? _self.libraryPageSize
           : libraryPageSize // ignore: cast_nullable_to_non_nullable
               as int?,
+      episodeViewType: freezed == episodeViewType
+          ? _self.episodeViewType
+          : episodeViewType // ignore: cast_nullable_to_non_nullable
+              as EpisodeDetailsViewType?,
       shortcuts: null == shortcuts
           ? _self._shortcuts
           : shortcuts // ignore: cast_nullable_to_non_nullable
