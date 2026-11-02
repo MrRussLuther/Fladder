@@ -320,6 +320,15 @@ class _PlayerSettingsPageState extends ConsumerState<PlayerSettingsPage> {
                   ],
                 ),
               ),
+            SettingsListTile(
+              label: Text(context.localized.showPlaybackRateButtonTitle),
+              subLabel: Text(context.localized.showPlaybackRateButtonDesc),
+              onTap: () => provider.setShowPlaybackRateButton(!videoSettings.showPlaybackRateButton),
+              trailing: Switch(
+                value: videoSettings.showPlaybackRateButton,
+                onChanged: (value) => provider.setShowPlaybackRateButton(value),
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),

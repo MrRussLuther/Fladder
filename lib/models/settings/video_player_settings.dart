@@ -105,6 +105,7 @@ abstract class VideoPlayerSettingsModel with _$VideoPlayerSettingsModel {
     @Default(Screensaver.logo) Screensaver screensaver,
     @Default(false) bool enableSpeedBoost,
     @Default(2.0) double speedBoostRate,
+    @Default(false) bool showPlaybackRateButton,
     @Default(true) bool enableDoubleTapSeek,
     @Default(false) bool enableAdvancedVideoOptions,
     @Default(true) bool enableEdgeGestures,
